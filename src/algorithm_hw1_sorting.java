@@ -1,26 +1,101 @@
-import jdk.jfr.Unsigned;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 public class algorithm_hw1_sorting {
-    static final int MAX_SIZE = 100;
+    static final int MAX_SIZE = 10000;
 
     public static void main(String[] args) {
-        int[] testArray = new int[20];
-        RandomArrayGenerator(testArray);
+        long startTime, endTime;
+        int[] testArray, copyArray;
+        int startSize = 10000, endSize = 50000, stepSize = 10000;
 
-//        InsertionSort(testArray);
-//        BinaryInsertionSort(testArray);
-//        MergeSort(testArray);
-//        QuickSort(testArray, testArray.length, 0, testArray.length - 1, 0);
-//        QuickSort(testArray, testArray.length, 0, testArray.length - 1, 1);
-//        HeapSort(testArray);
-        CountingSort(testArray);
+        System.out.println("---------- Insertion Sort");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
 
-        PrintArray(testArray);
+            startTime = System.nanoTime();
+            InsertionSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
 
+        System.out.println("\n---------- Binary Insertion Sort");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
 
+            startTime = System.nanoTime();
+            BinaryInsertionSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- MergeSort");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
+
+            startTime = System.nanoTime();
+            MergeSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- QuickSort(Pivot First)");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
+
+            startTime = System.nanoTime();
+            QuickSortPivotFirst(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- QuickSort(Median of Three)");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
+
+            startTime = System.nanoTime();
+            QuickSortMedianOfThree(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- HeapSort");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
+
+            startTime = System.nanoTime();
+            HeapSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- Counting Sort");
+        for (int i = startSize; i <= endSize; i += stepSize) {
+            testArray = new int[i];
+//            SortedArrayGenerator(testArray, 0);
+            SortedArrayGenerator(testArray, 1);
+//            RandomArrayGenerator(testArray);
+
+            startTime = System.nanoTime();
+            CountingSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
     }
 
     static void InsertionSort(int[] array) {
@@ -28,9 +103,22 @@ public class algorithm_hw1_sorting {
 
         for (int i = 1; i < array.length; i++) {
             currentElement = array[i];
-            for (j = i - 1; j >= 0 && array[j] > currentElement; j--)
+            for (j = i - 1; j >= 0 && array[j] > currentElement; j--) {
                 array[j + 1] = array[j];
+            }
             array[j + 1] = currentElement;
+        }
+    }
+
+    static void BinaryInsertionSort(int[] array) {
+        int j, current, location;
+        for (int i = 1; i < array.length; ++i) {
+            j = i - 1;
+            current = array[i];
+            for (location = BinarySearch(array, 0, j, current); j >= location; j--) {
+                array[j + 1] = array[j];
+            }
+            array[j + 1] = current;
         }
     }
 
@@ -52,16 +140,19 @@ public class algorithm_hw1_sorting {
         return BinarySearch(array, low, mid - 1, element);
     }
 
-    static void BinaryInsertionSort(int[] array) {
-        int j, current, location;
-        for (int i = 1; i < array.length; ++i) {
-            j = i - 1;
-            current = array[i];
+    static void MergeSort(int[] array) {
+        int firstHalfLength = (int) Math.floor(array.length / 2.0);
+        int secondHalfLength = (int) Math.ceil(array.length / 2.0);
 
-            for (location = BinarySearch(array, 0, j, current); j >= location; j--)
-                array[j + 1] = array[j];
+        int[] firstHalfArr = new int[firstHalfLength];
+        int[] secondHalfArr = new int[secondHalfLength];
 
-            array[j + 1] = current;
+        if (array.length > 1) {
+            ArrayCopy(array, firstHalfArr, 0, array.length / 2 - 1, 0);
+            ArrayCopy(array, secondHalfArr, array.length / 2, array.length - 1, 0);
+            MergeSort(firstHalfArr);
+            MergeSort(secondHalfArr);
+            Merge(firstHalfArr, secondHalfArr, array);
         }
     }
 
@@ -89,34 +180,12 @@ public class algorithm_hw1_sorting {
             ArrayCopy(first, array, i, first.length - 1, k);
     }
 
-    static void MergeSort(int[] array) {
-        int firstHalfLength = (int) Math.floor(array.length / 2.0);
-        int secondHalfLength = (int) Math.ceil(array.length / 2.0);
-
-        int[] firstHalfArr = new int[firstHalfLength];
-        int[] secondHalfArr = new int[secondHalfLength];
-
-        if (array.length > 1) {
-            ArrayCopy(array, firstHalfArr, 0, array.length / 2 - 1, 0);
-            ArrayCopy(array, secondHalfArr, array.length / 2, array.length - 1, 0);
-            MergeSort(firstHalfArr);
-            MergeSort(secondHalfArr);
-            Merge(firstHalfArr, secondHalfArr, array);
-        }
+    static void QuickSortPivotFirst(int[] array) {
+        QuickSort(array, array.length, 0, array.length - 1, 0);
     }
 
-    static void MedianOfThree(int[] array, int first, int last) {
-        int mediumIndex = (last - first + 1) / 2;
-
-        int[] allThree = {array[first], array[mediumIndex], array[last]};
-        InsertionSort(allThree);
-
-        int temp = array[first];
-        array[first] = allThree[1];
-        if (allThree[1] == array[last])
-            array[last] = temp;
-        else if (allThree[1] == array[mediumIndex])
-            array[mediumIndex] = temp;
+    static void QuickSortMedianOfThree(int[] array) {
+        QuickSort(array, array.length, 0, array.length - 1, 1);
     }
 
     static void QuickSort(int[] array, int length, int first, int last, int mode) {
@@ -148,6 +217,22 @@ public class algorithm_hw1_sorting {
         }
     }
 
+    static void HeapSort(int[] array) {
+        for (int i = array.length / 2 - 1; i >= 0; i--)
+            ConstructHeap(array, array.length, i);
+
+        for (int i = array.length - 1; i > 0; i--) {
+            Swap(array, 0, i);
+            ConstructHeap(array, i, 0);
+        }
+    }
+
+    static void Swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
     static void ConstructHeap(int[] array, int length, int index) {
         int max = index;
         int left = 2 * index + 1;
@@ -162,16 +247,6 @@ public class algorithm_hw1_sorting {
         if (max != index) {
             Swap(array, index, max);
             ConstructHeap(array, length, max);
-        }
-    }
-
-    static void HeapSort(int[] array) {
-        for (int i = array.length / 2 - 1; i >= 0; i--)
-            ConstructHeap(array, array.length, i);
-
-        for (int i = array.length - 1; i > 0; i--) {
-            Swap(array, 0, i);
-            ConstructHeap(array, i, 0);
         }
     }
 
@@ -202,10 +277,18 @@ public class algorithm_hw1_sorting {
         ArrayCopy(outputArr, array, 0, array.length - 1, 0);
     }
 
-    static void Swap(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
+    static void MedianOfThree(int[] array, int first, int last) {
+        int mediumIndex = (last - first + 1) / 2;
+
+        int[] allThree = {array[first], array[mediumIndex], array[last]};
+        InsertionSort(allThree);
+
+        int temp = array[first];
+        array[first] = allThree[1];
+        if (allThree[1] == array[last])
+            array[last] = temp;
+        else if (allThree[1] == array[mediumIndex])
+            array[mediumIndex] = temp;
     }
 
     static void PrintArray(int[] array) {
@@ -221,5 +304,16 @@ public class algorithm_hw1_sorting {
             array[i] = (int) (Math.random() * MAX_SIZE);
     }
 
-
+    static void SortedArrayGenerator(int[] array, int mode) {
+        if (mode == 0) {
+            for (int i = 0; i < array.length; i++)
+                array[i] = i;
+        } else if (mode == 1) {
+            for (int i = 0, j = array.length - 1; i < array.length; i++, j--)
+                array[i] = j;
+        } else {
+            System.out.println("Invalid mode selected for SortedArrayGenerator method!");
+            System.exit(1);
+        }
+    }
 }
