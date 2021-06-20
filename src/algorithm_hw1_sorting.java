@@ -1,101 +1,22 @@
+import java.util.Scanner;
+
+/**
+ * Yasin Tarakçı
+ * This is the Java implementation of my sorting-algorithms-with-C group project.
+ */
+
 public class algorithm_hw1_sorting {
     static final int MAX_SIZE = 10000;
+    static long startTime, endTime;
+    static final int START_LENGTH = 10000, END_LENGTH = 50000, STEP_SIZE = 10000;
 
     public static void main(String[] args) {
-        long startTime, endTime;
-        int[] testArray, copyArray;
-        int startSize = 10000, endSize = 50000, stepSize = 10000;
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println("---------- Insertion Sort");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
+        System.out.print("Enter the array generation mode (Sorted - S, Reverse Sorted - RS, Random - R): ");
+        String arrayGenerateMode = sc.next().toUpperCase();
 
-            startTime = System.nanoTime();
-            InsertionSort(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- Binary Insertion Sort");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            BinaryInsertionSort(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- MergeSort");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            MergeSort(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- QuickSort(Pivot First)");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            QuickSortPivotFirst(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- QuickSort(Median of Three)");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            QuickSortMedianOfThree(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- HeapSort");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            HeapSort(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
-
-        System.out.println("\n---------- Counting Sort");
-        for (int i = startSize; i <= endSize; i += stepSize) {
-            testArray = new int[i];
-//            SortedArrayGenerator(testArray, 0);
-            SortedArrayGenerator(testArray, 1);
-//            RandomArrayGenerator(testArray);
-
-            startTime = System.nanoTime();
-            CountingSort(testArray);
-            endTime = System.nanoTime();
-            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
-        }
+        PrintTest(arrayGenerateMode);
     }
 
     static void InsertionSort(int[] array) {
@@ -314,6 +235,115 @@ public class algorithm_hw1_sorting {
         } else {
             System.out.println("Invalid mode selected for SortedArrayGenerator method!");
             System.exit(1);
+        }
+    }
+
+    static void PrintTest(String mode) {
+        int[] testArray;
+
+        System.out.println("\n---------- Insertion Sort");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            InsertionSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- Binary Insertion Sort");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            BinaryInsertionSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- MergeSort");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            MergeSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- QuickSort(Pivot First)");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            QuickSortPivotFirst(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- QuickSort(Median of Three)");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            QuickSortMedianOfThree(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- HeapSort");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            HeapSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
+        }
+
+        System.out.println("\n---------- Counting Sort");
+        for (int i = START_LENGTH; i <= END_LENGTH; i += STEP_SIZE) {
+            testArray = new int[i];
+            switch (mode) {
+                case "S" -> SortedArrayGenerator(testArray, 0);
+                case "RS" -> SortedArrayGenerator(testArray, 1);
+                case "R" -> RandomArrayGenerator(testArray);
+            }
+
+            startTime = System.nanoTime();
+            CountingSort(testArray);
+            endTime = System.nanoTime();
+            System.out.println("Elapsed Time for n = " + i + " is " + (endTime - startTime) + " ns");
         }
     }
 }
