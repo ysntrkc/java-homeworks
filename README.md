@@ -1,3 +1,3 @@
 # Java Homeworks
 
-This is my repository of java assignments from my **programming 1** and **programming 2** course.
+In this repository there are codes I wrote for my university courses.
