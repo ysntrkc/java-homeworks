@@ -14,7 +14,7 @@ public class hw7_simple_snake_game {
 
         //This loop check the answer because if size is smaller than 3 grid game won't work correctly.
         while (size < 3) {
-            System.out.println("Please enter the grid size (bigger than 2): ");
+            System.out.println("Please enter the grid size (bigger than 2, smaller than 12): ");
             size = scr.nextInt();
         }
 
